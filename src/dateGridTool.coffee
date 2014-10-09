@@ -14,26 +14,35 @@ angular.module("dateGridTool", []).directive "dateGridTool", ["$document", ($doc
         EVERYDAY_GRID = "everydayGrid"
         ALL_DAY_GRID = "allDayGrid"
 
-        WEEKDAY_ARRAY = [0 .. 6]
-        DAYHOUR_ARRAY = [0 .. 23]
+        # WEEKDAY_ARRAY = [0 .. 6]
+        # DAYHOUR_ARRAY = [0 .. 23]
 
+        # init = () ->
 
+        #   for day in WEEKDAY_ARRAY
+        #     for hour in DAYHOUR_ARRAY
+        #       scope.dateGrid.week[day].hours.push
+        #         day: day
+        #         hour: hour
+        #         selected: false
+        #       if day == 0
+        #         scope.dateGrid.everyday.hours.push
+        #           hour: hour
+        #           selected: false
+        #     scope.dateGrid.week[day].allday =
+        #       selected: false
+
+        initCells = (cellnum, array) ->
+          for i in [1..cellnum]
+            array.push false
 
         init = () ->
-
-          for day in WEEKDAY_ARRAY
-            for hour in DAYHOUR_ARRAY
-              scope.dateGrid.week[day].hours.push
-                day: day
-                hour: hour
-                selected: false
-              if day == 0
-                scope.dateGrid.everyday.hours.push
-                  hour: hour
-                  selected: false
-            scope.dateGrid.week[day].allday =
-              selected: false
-
+          for attr, value of scope.dateGrid
+            switch attr
+              when 'columnTitle','rowNum','columnNum' then
+              when 'totalRow' then initCells( scope.dateGrid.columnNum, scope.dateGrid.totalRow.cells )
+              when 'totalColumn' then initCells( scope.dateGrid.rowNum, scope.dateGrid.totalColumn.cells )
+              else initCells( scope.dateGrid.columnNum, scope.dateGrid[attr] )
 
 
         setStartGrid = (type, value, selected) ->
